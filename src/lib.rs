@@ -1,4 +1,8 @@
 pub fn solve(n: u32, from: u32, to: u32, helper: u32, moves: &mut Vec<(u32, u32)>) {
+    if n == 0 {
+        return;
+    }
+
     if n == 1 {
         moves.push((from, to));
         return;
