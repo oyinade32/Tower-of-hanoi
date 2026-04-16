@@ -1,11 +1,15 @@
-// In this implementation, a Vec is used to store moves for testing and benchmarking purposes.
-// This makes the solution more modular and easier to verify.
-// However, for competitive programming (e.g., CSES), printing moves directly
-// would be more memory efficient, since it avoids storing all moves in memory.
+// Tower of Hanoi implementations
 
-
-
-pub fn solve(n: u32, from: u32, to: u32, helper: u32, moves: &mut Vec<(u32, u32)>) {
+// Recursive solution
+// Time complexity: O(2^n)
+// Space complexity: O(n) due to recursion stack
+pub fn solve_recursive(
+    n: u32,
+    from: u32,
+    to: u32,
+    helper: u32,
+    moves: &mut Vec<(u32, u32)>
+) {
     if n == 0 {
         return;
     }
@@ -15,10 +19,32 @@ pub fn solve(n: u32, from: u32, to: u32, helper: u32, moves: &mut Vec<(u32, u32)
         return;
     }
 
-    solve(n - 1, from, helper, to, moves);
+    solve_recursive(n - 1, from, helper, to, moves);
     moves.push((from, to));
-    solve(n - 1, helper, to, from, moves);
+    solve_recursive(n - 1, helper, to, from, moves);
 }
 
-// Note: This solution uses recursion, which incurs function call stack overhead.
-// However, since the constraint n ≤ 16, the recursion depth is small and safe.
+
+// Iterative solution (for benchmarking comparison)
+// Avoids recursion by using a pattern-based approach
+// Time complexity: O(2^n)
+// Space complexity: O(2^n) for storing moves
+pub fn solve_iterative(n: u32) -> Vec<(u32, u32)> {
+    let mut moves = Vec::new();
+
+    let total_moves = (1 << n) - 1;
+
+    let (src, aux, dest) = (1, 2, 3);
+
+    for i in 1..=total_moves {
+        if i % 3 == 1 {
+            moves.push((src, dest));
+        } else if i % 3 == 2 {
+            moves.push((src, aux));
+        } else {
+            moves.push((aux, dest));
+        }
+    }
+
+    moves
+}
